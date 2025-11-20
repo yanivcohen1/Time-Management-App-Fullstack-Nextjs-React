@@ -1,19 +1,7 @@
+import { PaletteMode } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
-const theme = createTheme({
-  palette: {
-    mode: "dark",
-    primary: {
-      main: "#8E44FF"
-    },
-    secondary: {
-      main: "#2ECC71"
-    },
-    background: {
-      default: "#09090b",
-      paper: "#111113"
-    }
-  },
+const baseTokens = {
   shape: {
     borderRadius: 10
   },
@@ -27,6 +15,29 @@ const theme = createTheme({
       }
     }
   }
-});
+} as const;
 
-export default theme;
+export function createAppTheme(mode: PaletteMode) {
+  return createTheme({
+    ...baseTokens,
+    palette: {
+      mode,
+      primary: {
+        main: "#8E44FF"
+      },
+      secondary: {
+        main: "#2ECC71"
+      },
+      background:
+        mode === "dark"
+          ? { default: "#09090b", paper: "#111113" }
+          : { default: "#f5f5f7", paper: "#ffffff" },
+      text:
+        mode === "dark"
+          ? { primary: "#f4f4f5", secondary: "#c1c1cb" }
+          : { primary: "#0f0f11", secondary: "#575764" }
+    }
+  });
+}
+
+export type AppThemeMode = PaletteMode;
