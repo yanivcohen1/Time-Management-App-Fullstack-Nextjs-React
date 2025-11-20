@@ -39,7 +39,7 @@ export const useUpdateTodo = () => {
   return useMutation({
     mutationFn: async (payload: UpsertTodoInput) => {
       const { id, ...rest } = payload;
-      const { data } = await api.patch(`/api/todos/${id}`, rest);
+      const { data } = await api.put(`/api/todos/${id}`, { ...rest, id });
       return data;
     },
     onSuccess: () => {

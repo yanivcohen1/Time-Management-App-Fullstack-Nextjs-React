@@ -75,13 +75,29 @@ export function TodoDialog({ open, initialValues, isSaving, onClose, onSave }: P
             error={!!errors.description}
             helperText={errors.description?.message}
           />
-          <TextField select label="Status" {...register("status")}>
-            {statusOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                select
+                label="Status"
+                value={field.value ?? "PENDING"}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                inputRef={field.ref}
+                error={!!errors.status}
+                helperText={errors.status?.message}
+              >
+                {statusOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
           <Controller
             name="dueDate"
             control={control}

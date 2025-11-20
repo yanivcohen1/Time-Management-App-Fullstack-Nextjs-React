@@ -15,22 +15,26 @@ const loadTodo = async (id: string, owner: User) => {
   return { todo, em } as const;
 };
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+type RouteContext = { params: Promise<{ id: string }> };
+
+export async function GET(request: NextRequest, context: RouteContext) {
   try {
     const { user } = await requireUser(request);
-    const { todo } = await loadTodo(params.id, user);
+    const { id } = await context.params;
+    const { todo } = await loadTodo(id, user);
     return json({ todo: toTodoDTO(todo) });
   } catch (error) {
     return handleError(error);
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, context: RouteContext) {
   try {
     const { user } = await requireUser(request);
     const payload = updateTodoSchema.parse(await request.json());
-    assert(!payload.id || payload.id === params.id, 400, "Todo id mismatch");
-    const { todo, em } = await loadTodo(params.id, user);
+    const { id } = await context.params;
+    assert(!payload.id || payload.id === id, 400, "Todo id mismatch");
+    const { todo, em } = await loadTodo(id, user);
 
     todo.title = payload.title;
     todo.description = payload.description;
@@ -45,10 +49,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
     const { user } = await requireUser(request);
-    const { todo, em } = await loadTodo(params.id, user);
+    const { id } = await context.params;
+    const { todo, em } = await loadTodo(id, user);
     await em.removeAndFlush(todo);
     return json({ success: true });
   } catch (error) {

@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { showSnackbar } from "@/lib/ui/snackbar";
 import { tokenStorage } from "./token-storage";
 
 const envBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.trim();
@@ -46,10 +47,17 @@ api.interceptors.response.use(
       refreshPromise = null;
 
       if (newToken) {
+        config.headers = config.headers ?? {};
         config.headers.Authorization = `Bearer ${newToken}`;
         return api(config);
       }
       tokenStorage.clear();
+      const serverMessage = response?.data?.message;
+      const fallbackMessage = "Unauthorized request. Please sign in again.";
+      showSnackbar({
+        message: typeof serverMessage === "string" ? serverMessage : fallbackMessage,
+        severity: "error"
+      });
     }
     return Promise.reject(error);
   }

@@ -8,6 +8,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import theme from "@/theme";
+import { SnackbarProvider } from "@/components/common/SnackbarProvider";
 
 export function RootProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -28,8 +29,10 @@ export function RootProviders({ children }: { children: ReactNode }) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CssBaseline />
           <QueryClientProvider client={queryClient}>
-            {children}
-            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+            <SnackbarProvider>
+              {children}
+              <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+            </SnackbarProvider>
           </QueryClientProvider>
         </LocalizationProvider>
       </ThemeProvider>
