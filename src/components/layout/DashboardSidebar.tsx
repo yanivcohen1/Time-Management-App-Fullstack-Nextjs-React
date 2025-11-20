@@ -1,31 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useMemo, useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Collapse,
-  Divider,
-  IconButton,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Avatar, Box, Button, Collapse, Divider, List, ListItemButton, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import ChecklistRoundedIcon from "@mui/icons-material/ChecklistRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { useLogout, useSession } from "@/hooks/useAuth";
 
 export type DashboardSidebarProps = {
@@ -54,6 +42,7 @@ const navItems: NavItem[] = [
 
 export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session } = useSession();
   const { mutateAsync: logout, isPending: isLoggingOut } = useLogout();
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
@@ -75,6 +64,20 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
     onNavigate?.();
   };
 
+  const handleLogin = () => {
+    handleNavigate();
+    router.push("/login");
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } finally {
+      handleNavigate();
+      router.push("/login");
+    }
+  };
+
   const toggleGroup = (label: string) => {
     setExpandedGroups((prev) => ({ ...prev, [label]: !prev[label] }));
   };
@@ -93,6 +96,8 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
     return pathname === href;
   };
 
+  const isAuthenticated = Boolean(session?.user);
+
   return (
     <Stack spacing={3} sx={{ minHeight: "100%" }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" px={1}>
@@ -104,9 +109,7 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
             Stay on track
           </Typography>
         </Stack>
-        <IconButton size="small" color="inherit" aria-label="open settings">
-          <SettingsRoundedIcon fontSize="small" />
-        </IconButton>
+        <ThemeToggle variant="inline" />
       </Stack>
 
       <List component="nav" disablePadding>
@@ -205,26 +208,36 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
         <Stack direction="row" alignItems="center" spacing={2}>
           <Avatar sx={{ bgcolor: "primary.main", width: 48, height: 48 }}>{initials}</Avatar>
           <Stack>
-            <Typography fontWeight={600}>{session?.user.name ?? "Anonymous"}</Typography>
+            <Typography fontWeight={600}>{session?.user.name ?? "Guest"}</Typography>
             <Typography variant="caption" color="text.secondary">
-              {session?.user.email ?? "Pending invite"}
+              {session?.user.email ?? "Access limited"}
             </Typography>
           </Stack>
         </Stack>
-        <Button
-          variant="contained"
-          color="error"
-          startIcon={<LogoutRoundedIcon />}
-          onClick={async () => {
-            await logout();
-            handleNavigate();
-          }}
-          disabled={isLoggingOut}
-          fullWidth
-          sx={{ mt: 3, borderRadius: 3, py: 1.5, fontWeight: 600 }}
-        >
-          Log out
-        </Button>
+        {isAuthenticated ? (
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<LogoutRoundedIcon />}
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            fullWidth
+            sx={{ mt: 3, borderRadius: 3, py: 1.5, fontWeight: 600 }}
+          >
+            Log out
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<LoginRoundedIcon />}
+            onClick={handleLogin}
+            fullWidth
+            sx={{ mt: 3, borderRadius: 3, py: 1.5, fontWeight: 600 }}
+          >
+            Log in
+          </Button>
+        )}
       </Box>
     </Stack>
   );

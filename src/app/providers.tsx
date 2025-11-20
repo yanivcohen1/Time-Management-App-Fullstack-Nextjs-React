@@ -9,7 +9,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { createAppTheme } from "@/theme";
 import { SnackbarProvider } from "@/components/common/SnackbarProvider";
-import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { ThemeModeContext } from "@/hooks/useThemeMode";
 
 export function RootProviders({ children }: { children: ReactNode }) {
@@ -44,7 +43,6 @@ export function RootProviders({ children }: { children: ReactNode }) {
             <CssBaseline />
             <QueryClientProvider client={queryClient}>
               <SnackbarProvider>
-                <ThemeToggle />
                 {children}
                 <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
               </SnackbarProvider>
