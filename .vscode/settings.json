@@ -1,0 +1,10 @@
+{
+  "vitest.commandLine": "pnpm vitest",
+  "vitest.configPath": "${workspaceFolder}/vitest.config.ts",
+  "vitest.include": [
+    "src/**/*.test.{ts,tsx}",
+    "src/**/*.spec.{ts,tsx}"
+  ],
+  "vitest.workingDirectory": "${workspaceFolder}",
+  "jest.enable": false
+}
