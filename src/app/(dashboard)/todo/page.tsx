@@ -1,7 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, CircularProgress, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Paper,
+  Stack,
+  Typography
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { TodoFilters } from "@/components/todos/TodoFilters";
 import { TodoList } from "@/components/todos/TodoList";
@@ -16,11 +28,13 @@ export default function TodoPage() {
   const [filters, setFilters] = useState<TodoFilterInput>({});
   const [dialogValues, setDialogValues] = useState<UpsertTodoInput | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<TodoDTO | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const { data: session, isLoading: sessionLoading, isError: sessionError } = useSession();
   const { mutateAsync: createTodo, isPending: isCreating } = useCreateTodo();
   const { mutateAsync: updateTodo, isPending: isUpdating } = useUpdateTodo();
-  const { mutateAsync: deleteTodo } = useDeleteTodo();
+  const { mutateAsync: deleteTodo, isPending: isDeleting } = useDeleteTodo();
   const { mutateAsync: logout } = useLogout();
 
   const { data: todosData, isLoading: todosLoading } = useTodos(filters);
@@ -35,8 +49,23 @@ export default function TodoPage() {
     setDialogValues(undefined);
   };
 
-  const handleDelete = async (id: string) => {
-    await deleteTodo(id);
+  const handleDeleteRequest = (todo: TodoDTO) => {
+    setDeleteTarget(todo);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) {
+      return;
+    }
+    await deleteTodo(deleteTarget.id);
+    setIsDeleteDialogOpen(false);
+    setDeleteTarget(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteDialogOpen(false);
+    setDeleteTarget(null);
   };
 
   const openDialogForTodo = (todo?: TodoDTO) => {
@@ -111,7 +140,7 @@ export default function TodoPage() {
             <TodoList
               todos={todosData?.todos ?? []}
               onEdit={(todo) => openDialogForTodo(todo)}
-              onDelete={handleDelete}
+              onDelete={handleDeleteRequest}
             />
           )}
         </Box>
@@ -138,6 +167,23 @@ export default function TodoPage() {
         }}
         onSave={handleSave}
       />
+
+      <Dialog open={isDeleteDialogOpen} onClose={handleDeleteCancel} aria-labelledby="delete-todo-dialog-title">
+        <DialogTitle id="delete-todo-dialog-title">Delete todo</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {`Are you sure you want to delete "${deleteTarget?.title ?? "this todo"}"? This action cannot be undone.`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} disabled={isDeleting}>
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" disabled={isDeleting} autoFocus>
+            {isDeleting ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </main>
   );
 }

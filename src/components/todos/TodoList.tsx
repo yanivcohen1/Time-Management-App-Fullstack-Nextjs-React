@@ -33,7 +33,7 @@ const statusMeta: Record<TodoStatus, StatusMeta> = {
 type Props = {
   todos: TodoDTO[];
   onEdit: (todo: TodoDTO) => void;
-  onDelete: (id: string) => void;
+  onDelete: (todo: TodoDTO) => void;
 };
 
 export function TodoList({ todos, onEdit, onDelete }: Props) {
@@ -62,7 +62,7 @@ export function TodoList({ todos, onEdit, onDelete }: Props) {
                   <IconButton aria-label="edit" onClick={() => onEdit(todo)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton aria-label="delete" onClick={() => onDelete(todo.id)}>
+                  <IconButton aria-label="delete" onClick={() => onDelete(todo)}>
                     <DeleteIcon />
                   </IconButton>
                 </Stack>
