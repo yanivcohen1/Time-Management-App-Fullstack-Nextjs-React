@@ -1,7 +1,10 @@
 "use client";
 
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useMemo, useState } from "react";
 import { Box, Button, CircularProgress, FormControlLabel, Paper, Stack, Switch, Typography } from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
+import { BreadCrumb } from "primereact/breadcrumb";
+import { MenuItem } from "primereact/menuitem";
 import { useSession } from "@/hooks/useAuth";
 import { tokenStorage } from "@/lib/http/token-storage";
 
@@ -25,9 +28,43 @@ export function useAdminSwitch() {
 }
 
 export function AdminPageLayout({ children }: AdminPageLayoutProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const { data: session, isLoading: sessionLoading, isError: sessionError } = useSession();
   const hasToken = !!tokenStorage.getAccessToken();
   const [interWorkspaceEnabled, setInterWorkspaceEnabled] = useState(false);
+  const [activeView, setActiveView] = useState<"admin" | "user">(() => (pathname?.includes("/user/") ? "user" : "admin"));
+  const resolvedActiveView = pathname?.startsWith("/admin") ? (pathname.includes("/user/") ? "user" : "admin") : activeView;
+
+  const breadcrumbItems: MenuItem[] = useMemo(
+    () => [
+      {
+        label: "Admin",
+        icon: "pi pi-shield",
+        command: () => {
+          setActiveView("admin");
+          router.push("/admin/1");
+        },
+      },
+      {
+        label: "User",
+        icon: "pi pi-user",
+        command: () => {
+          setActiveView("user");
+          router.push("/admin/3/user/2?id=1&name=yar");
+        },
+      },
+    ],
+    [router, setActiveView]
+  );
+
+  const home: MenuItem = useMemo(
+    () => ({
+      icon: <span className="pi pi-home" aria-label="Home" />,
+      url: "/",
+    }),
+    []
+  );
 
   if ((!hasToken || sessionError) && !sessionLoading) {
     return (
@@ -64,6 +101,9 @@ export function AdminPageLayout({ children }: AdminPageLayoutProps) {
       <main>
         <Box sx={{ px: { xs: 2, md: 6 }, py: 6 }}>
           <Stack spacing={3}>
+            <Paper sx={{ p: 2, borderRadius: 3 }}>
+              <BreadCrumb home={home} model={breadcrumbItems} />
+            </Paper>
             <Stack
               direction={{ xs: "column", md: "row" }}
               alignItems={{ xs: "flex-start", md: "center" }}
@@ -77,6 +117,9 @@ export function AdminPageLayout({ children }: AdminPageLayoutProps) {
                 <Typography variant="body1" color="text.secondary">
                   Manage roles, enforce rate limits, and review access logs across the workspace.
                 </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Currently viewing: {resolvedActiveView === "admin" ? "Admin overview" : "User details"}
+                </Typography>
               </Stack>
 
               <FormControlLabel
@@ -87,7 +130,7 @@ export function AdminPageLayout({ children }: AdminPageLayoutProps) {
                     onChange={(_, checked) => setInterWorkspaceEnabled(checked)}
                   />
                 }
-                label={interWorkspaceEnabled ? "Inter2 workspace enabled" : "Inter2 workspace disabled"}
+                label={interWorkspaceEnabled ? "User workspace enabled" : "User workspace disabled"}
               />
             </Stack>
 
