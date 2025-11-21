@@ -6,5 +6,6 @@
     "src/**/*.spec.{ts,tsx}"
   ],
   "vitest.workingDirectory": "${workspaceFolder}",
-  "jest.enable": false
+  "jest.enable": false,
+  "playwright.testConfig": "${workspaceFolder}/playwright.config.ts"
 }

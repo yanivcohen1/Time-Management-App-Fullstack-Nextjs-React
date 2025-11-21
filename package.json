@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
-    "db:seed": "ts-node --project tsconfig.scripts.json scripts/seed.ts"
+    "db:seed": "ts-node --project tsconfig.scripts.json scripts/seed.ts",
+    "test:e2e": "npx playwright test"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",

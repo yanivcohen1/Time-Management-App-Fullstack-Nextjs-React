@@ -51,7 +51,10 @@ pnpm test              # Vitest unit tests
 pnpm test:watch        # Vitest in watch mode
 pnpm coverage          # Vitest coverage report
 pnpm db:seed           # seed demo user/todos via MikroORM
+pnpm test:e2e          # Playwright end-to-end tests (runs `npx playwright test`)
 ```
+
+Run `npx playwright install` once per environment to ensure the browser binaries required by `pnpm test:e2e` are available.
 
 ### Seeding
 
