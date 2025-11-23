@@ -9,5 +9,4 @@ export default defineConfig({
       // implement node event listeners here
     },
   },
-  types: ['cypress'],
 })
