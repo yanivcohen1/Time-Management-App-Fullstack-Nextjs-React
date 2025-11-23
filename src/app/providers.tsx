@@ -29,16 +29,10 @@ export function RootProviders({ children }: { children: ReactNode }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)", {
     defaultMatches: true
   });
-  const [mode, setMode] = useState<PaletteMode>(prefersDarkMode ? "dark" : "light");
-
-  useEffect(() => {
-    const savedMode = localStorage.getItem("theme-mode") as PaletteMode | null;
-    if (savedMode) {
-      setMode(savedMode);
-    } else {
-      setMode(prefersDarkMode ? "dark" : "light");
-    }
-  }, [prefersDarkMode]);
+  const [mode, setMode] = useState<PaletteMode>(() => {
+    const saved = localStorage.getItem("theme-mode") as PaletteMode | null;
+    return saved || (prefersDarkMode ? "dark" : "light");
+  });
 
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
 
