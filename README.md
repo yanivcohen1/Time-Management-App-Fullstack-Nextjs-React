@@ -6,15 +6,17 @@ Full-stack Next.js 16 application built with Material UI, MikroORM, and MongoDB 
 
 - Next.js 16 (App Router, TypeScript)
 - Material UI 6 + Joy UI helpers
-- MikroORM + MongoDB 3.4 (no Docker dependency; connect to any Mongo instance)
+- PrimeReact + PrimeIcons (UI components)
+- MikroORM + MongoDB (compatible with 3.4+)
+- TanStack Query (React Query)
 - Axios with automatic access-token refresh
 - React Hook Form + Zod validation
 - Vitest + Playwright for testing
+- Lucide React (Icons)
 
 ### Features
 
 - Email/password auth with registration, login, logout, and rotating refresh tokens.
-- Role-aware dashboard layouts (admin, inter, main, todo) backed by protected App Router routes.
 - Role-aware dashboard layouts (admin, inter, main, todo) backed by protected App Router routes and filtered navigation.
 - Admin console breadcrumb with PrimeReact icons that jumps between `/admin/1` and `/admin/3/user/2?id=1&name=yar`, showing the active admin/user IDs and query params inside shared layout panels, plus an Inter workspace deep-link at `/admin/inter/3?id=1&name=yar` that opens its own guarded page with the legacy Inter content and surfaces `inter_id`, `id`, and `name` parameters.
 - Todo management with filtering, dialog-driven CRUD, and status summaries powered by React Query.
