@@ -37,17 +37,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const resolvedActiveView = pathname?.startsWith("/admin") ? (pathname.includes("/user/") ? "user" : "admin") : activeView;
   const transitionKey = pathname ?? resolvedActiveView ?? "admin";
   const defaultInterWorkspaceEnabled = pathname?.includes("/user/") ?? false;
-  const [interWorkspaceState, setInterWorkspaceState] = useState<Record<string, boolean>>(() => ({
-    [transitionKey]: defaultInterWorkspaceEnabled
-  }));
-  const interWorkspaceEnabled = interWorkspaceState[transitionKey] ?? defaultInterWorkspaceEnabled;
+  const [interWorkspaceEnabled, setInterWorkspaceEnabled] = useState(defaultInterWorkspaceEnabled);
+
   const handleInterWorkspaceToggle = (enabled: boolean) => {
-    setInterWorkspaceState(prev => {
-      if (prev[transitionKey] === enabled) {
-        return prev;
-      }
-      return { ...prev, [transitionKey]: enabled };
-    });
+    setInterWorkspaceEnabled(enabled);
   };
   
   const nodeRef = useMemo(() => {
