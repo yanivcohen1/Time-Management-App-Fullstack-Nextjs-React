@@ -21,6 +21,7 @@ Full-stack Next.js 16 application built with Material UI, MikroORM, and MongoDB 
 - Role-aware dashboard layouts (admin, inter, main, todo) backed by protected App Router routes and filtered navigation.
 - Admin console breadcrumb with PrimeReact icons that jumps between `/admin/1` and `/admin/3/user/2?id=1&name=yar`, showing the active admin/user IDs and query params inside shared layout panels, plus an Inter workspace deep-link at `/admin/inter/3?id=1&name=yar` that opens its own guarded page with the legacy Inter content and surfaces `inter_id`, `id`, and `name` parameters.
 - Todo management with filtering, dialog-driven CRUD, and status summaries powered by React Query.
+- Jira-style Scrum board with drag-and-drop support for managing todo statuses (Pending, In Progress, Completed).
 - Quick profile inspector on the Todo page that pings the API and surfaces the current name + role via snackbar.
 - Built-in rate limiting, password hashing, and JWT session utilities for secure APIs.
 - Responsive Material UI theme with dark/light toggle and reusable layout components.
@@ -125,17 +126,22 @@ Reports include test results, screenshots of failures, and detailed logs. The HT
 
 ### Main Page
 
-<img width="2730" height="1816" alt="image" src="https://github.com/user-attachments/assets/5e6b062b-1dfb-4574-af68-e1aa70b38ab4" />
+<img width="1906" height="1442" alt="image" src="https://github.com/user-attachments/assets/4c135f6b-b84f-4d35-b34b-b34cb7ef1c2a" />
 
 ### Track Status
 
-<img width="2689" height="1610" alt="image" src="https://github.com/user-attachments/assets/44c559b9-a1a7-4998-b2ed-709f3b38bb6d" />
+<img width="1928" height="1828" alt="image" src="https://github.com/user-attachments/assets/4555a96c-3877-4af7-b744-ac5b9718f193" />
+
+### Jira Scram page
+
+<img width="2053" height="1262" alt="image" src="https://github.com/user-attachments/assets/1b9efd36-ee32-441c-93a2-b71e7d73c7ad" />
 
 ### Ligth mode
 
-<img width="1600" height="1198" alt="image" src="https://github.com/user-attachments/assets/fc6f0648-c4db-473c-861e-242d1681c5cd" />
+<img width="2051" height="1318" alt="image" src="https://github.com/user-attachments/assets/f4f3106f-d100-4eda-b63c-18751466652c" />
 
 ### Mobile mode
 
-<img width="1350" height="1764" alt="image" src="https://github.com/user-attachments/assets/50ba6a53-87b6-47a3-aa83-96796c7b6d72" />
+<img width="1367" height="1459" alt="image" src="https://github.com/user-attachments/assets/c07457d6-f6a9-4b46-9338-9c38f1f8aead" />
+
 
