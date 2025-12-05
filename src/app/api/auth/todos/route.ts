@@ -52,14 +52,21 @@ export async function GET(request: NextRequest) {
     const viewerForQuery = user.role === "admin" ? user : em.getReference(User, user.id);
     const where = buildFilter(request.nextUrl.searchParams, viewerForQuery);
 
+    const page = Number(request.nextUrl.searchParams.get("page")) || 1;
+    const limit = Number(request.nextUrl.searchParams.get("limit")) || 10;
+    const offset = (page - 1) * limit;
+
     const [todos, total] = await Promise.all([
-      em.find(Todo, where, { orderBy: { createdAt: "desc" } }),
+      em.find(Todo, where, { orderBy: { createdAt: "desc" }, limit, offset }),
       em.count(Todo, where)
     ]);
 
     return json({
       todos: todos.map(toTodoDTO),
-      total
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
     });
   } catch (error) {
     return handleError(error);

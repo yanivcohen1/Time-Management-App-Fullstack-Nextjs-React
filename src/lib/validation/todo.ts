@@ -23,7 +23,9 @@ export const todoFilterSchema = z.object({
   status,
   search: z.string().optional(),
   dueStart: z.coerce.date().optional(),
-  dueEnd: z.coerce.date().optional()
+  dueEnd: z.coerce.date().optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(5)
 });
 
 export type UpsertTodoInput = z.infer<typeof upsertTodoSchema>;

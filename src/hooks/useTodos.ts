@@ -9,6 +9,9 @@ import type { TodoDTO } from "@/types/todo";
 type TodosResponse = {
   todos: TodoDTO[];
   total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 };
 
 export const useTodos = (filters: Partial<TodoFilterInput>) =>

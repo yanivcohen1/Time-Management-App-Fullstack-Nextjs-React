@@ -30,7 +30,7 @@ export function TodoFilters({ filters, setFilters }: Props) {
         value={filters.status ?? ""}
         onChange={(event) => {
           const value = event.target.value as TodoStatus | "";
-          setFilters((prev) => ({ ...prev, status: value || undefined }));
+          setFilters((prev) => ({ ...prev, status: value || undefined, page: 1 }));
         }}
         sx={{ "& .MuiInputBase-root": { height: 40 } }}
       >
@@ -48,7 +48,7 @@ export function TodoFilters({ filters, setFilters }: Props) {
         size="small"
         value={filters.search ?? ""}
         onChange={(event) =>
-          setFilters((prev) => ({ ...prev, search: event.target.value || undefined }))
+          setFilters((prev) => ({ ...prev, search: event.target.value || undefined, page: 1 }))
         }
         sx={{ "& .MuiInputBase-root": { height: 40 } }}
       />
@@ -60,7 +60,8 @@ export function TodoFilters({ filters, setFilters }: Props) {
           onChange={(value) =>
             setFilters((prev) => ({
               ...prev,
-              dueStart: value ?? undefined
+              dueStart: value ?? undefined,
+              page: 1
             }))
           }
           slotProps={{
@@ -77,7 +78,8 @@ export function TodoFilters({ filters, setFilters }: Props) {
           onChange={(value) =>
             setFilters((prev) => ({
               ...prev,
-              dueEnd: value ?? undefined
+              dueEnd: value ?? undefined,
+              page: 1
             }))
           }
           slotProps={{

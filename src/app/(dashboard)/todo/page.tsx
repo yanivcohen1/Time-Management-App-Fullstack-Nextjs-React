@@ -12,7 +12,8 @@ import {
   DialogTitle,
   Paper,
   Stack,
-  Typography
+  Typography,
+  TablePagination
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { TodoFilters } from "@/components/todos/TodoFilters";
@@ -25,7 +26,10 @@ import type { TodoFilterInput, UpsertTodoInput } from "@/lib/validation/todo";
 import type { TodoDTO } from "@/types/todo";
 
 export default function TodoPage() {
-  const [filters, setFilters] = useState<TodoFilterInput>({});
+  const [filters, setFilters] = useState<TodoFilterInput>({
+    page: 1,
+    limit: 5
+  });
   const [dialogValues, setDialogValues] = useState<UpsertTodoInput | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<TodoDTO | null>(null);
@@ -156,6 +160,25 @@ export default function TodoPage() {
               todos={todosData?.todos ?? []}
               onEdit={(todo) => openDialogForTodo(todo)}
               onDelete={handleDeleteRequest}
+            />
+          )}
+          {todosData && todosData.totalPages > 0 && (
+            <TablePagination
+              component="div"
+              count={todosData.total}
+              page={filters.page - 1}
+              onPageChange={(event, newPage) => {
+                setFilters((prev) => ({ ...prev, page: newPage + 1 }));
+              }}
+              rowsPerPage={filters.limit}
+              onRowsPerPageChange={(event) => {
+                setFilters((prev) => ({
+                  ...prev,
+                  limit: parseInt(event.target.value, 10),
+                  page: 1
+                }));
+              }}
+              rowsPerPageOptions={[2, 3, 4, 5, 10, 20, 50]}
             />
           )}
         </Box>
