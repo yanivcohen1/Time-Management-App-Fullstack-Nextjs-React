@@ -33,7 +33,7 @@ export function TodoFilters({ filters, setFilters }: Props) {
           const value = event.target.value as TodoStatus | "";
           setFilters((prev) => ({ ...prev, status: value || undefined, page: 1 }));
         }}
-        sx={{ "& .MuiInputBase-root": { height: 40 } }}
+        sx={{ width: { xs: "100%", md: 140 }, "& .MuiInputBase-root": { height: 40 } }}
       >
         {statusOptions.map((option) => (
           <MenuItem key={option.label} value={option.value}>
@@ -51,10 +51,10 @@ export function TodoFilters({ filters, setFilters }: Props) {
         onChange={(event) =>
           setFilters((prev) => ({ ...prev, search: event.target.value || undefined, page: 1 }))
         }
-        sx={{ "& .MuiInputBase-root": { height: 40 } }}
+        sx={{ width: { xs: "100%", md: "auto" }, flexGrow: 1, "& .MuiInputBase-root": { height: 40 } }}
       />
 
-      <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ minWidth: 280 }} alignItems="center">
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2} alignItems="center">
         <DatePicker
           label="Due start"
           value={filters.dueStart ?? null}
@@ -69,7 +69,7 @@ export function TodoFilters({ filters, setFilters }: Props) {
             textField: {
               fullWidth: true,
               size: "small",
-              sx: { "& .MuiInputBase-root": { height: 40 } }
+              sx: { width: { xs: "100%", md: 170 }, "& .MuiInputBase-root": { height: 40 } }
             }
           }}
         />
@@ -87,7 +87,7 @@ export function TodoFilters({ filters, setFilters }: Props) {
             textField: {
               fullWidth: true,
               size: "small",
-              sx: { "& .MuiInputBase-root": { height: 40 } }
+              sx: { width: { xs: "100%", md: 170 }, "& .MuiInputBase-root": { height: 40 } }
             }
           }}
         />
